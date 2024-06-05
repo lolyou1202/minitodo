@@ -1,0 +1,42 @@
+.todo-check {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	padding: 0px 8px;
+	border: none;
+	background: none;
+	cursor: pointer;
+	span {
+		width: 32px;
+		height: 32px;
+		border-radius: 100%;
+		transition: all 0.2s ease-in-out;
+	}
+	svg {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		transition: all 0.2s ease-in-out;
+	}
+	path {
+		transition: all 0.2s ease-in-out;
+	}
+	&.empty {
+		span {
+			border: 1px solid var(--gray-20);
+		}
+		path {
+			stroke: transparent;
+		}
+	}
+	&.checked {
+		span {
+			border: 1px solid var(--green);
+		}
+		path {
+			stroke: var(--green);
+		}
+	}
+}
