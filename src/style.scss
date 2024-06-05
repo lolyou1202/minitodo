@@ -107,44 +107,6 @@ body {
 	margin: 0;
 	padding: 0;
 }
-.todo__item {
-	display: flex;
-	height: 64px;
-}
-.todo__item:not(:last-child) {
-	border-bottom: 1px solid var(--gray-10);
-}
-.todo__item-toggle {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	border: none;
-	background: none;
-	padding: 8px;
-	cursor: pointer;
-}
-.todo__item-input {
-	width: 100%;
-	padding: 0 16px;
-	border: none;
-	border-radius: 0;
-	outline: none;
-	font-family: 'Work Sans', sans-serif;
-	font-weight: 400;
-	font-size: 24px;
-	line-height: 32px;
-	color: var(--text-100);
-	text-decoration: line-through;
-}
-.todo__item-cross {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	border: none;
-	background: none;
-	padding: 8px 16px;
-	cursor: pointer;
-}
 .footer {
 	display: flex;
 	align-items: center;

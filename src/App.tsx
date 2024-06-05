@@ -6,19 +6,19 @@ import { TodoItem } from './components/TodoItem/TodoItem'
 export type Todo = {
 	id: number
 	text: string
-	isChecked: boolean
+	isCompleted: boolean
 }
 
 function App() {
 	const [todoList, setTodoList] = useState<Todo[]>([
-		{ id: 1, text: 'asdasfa', isChecked: false },
+		{ id: 1, text: 'asdasfa', isCompleted: false },
 	])
 
 	const toggleCheck = (id: number) => {
 		setTodoList(prev =>
 			prev.map(todo => {
 				if (todo.id === id) {
-					todo.isChecked = !todo.isChecked
+					todo.isCompleted = !todo.isCompleted
 				}
 				return todo
 			})
@@ -60,6 +60,7 @@ function App() {
 									key={todo.id}
 									{...todo}
 									handleClickCheck={toggleCheck}
+									changeNameTodo={changeNameTodo}
 								/>
 							)
 						})}

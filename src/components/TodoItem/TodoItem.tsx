@@ -1,7 +1,9 @@
+import './TodoItem.style.scss'
 import { useState } from 'react'
 import { Cross } from '../../icons/Cross'
 import { ToggleCheck } from '../button/ToggleCheck/ToggleCheck'
 import { Todo } from '../../App'
+import classNames from 'classnames'
 
 interface Props extends Todo {
 	handleClickCheck?: (id: number) => void
@@ -10,7 +12,7 @@ interface Props extends Todo {
 
 export const TodoItem = ({
 	id,
-	isChecked = false,
+	isCompleted = false,
 	text,
 	handleClickCheck,
 	changeNameTodo,
@@ -24,19 +26,22 @@ export const TodoItem = ({
 		changeNameTodo && changeNameTodo(id, todoText)
 	}
 
+	const todoItemCN = classNames('todo__item', { completed: isCompleted })
+
 	return (
-		<li className='todo__item'>
+		<li className={todoItemCN}>
 			<ToggleCheck
-				variant={isChecked ? 'checked' : 'empty'}
+				variant={isCompleted ? 'checked' : 'empty'}
 				onClick={() => handleClickCheck && handleClickCheck(id)}
 			/>
-			<input
+			<div className='todo__item-input' contentEditable></div>
+			{/*<input
 				className='todo__item-input'
 				type='text'
 				value={todoText}
 				onChange={e => handleChangeInput(e.target.value)}
 				onBlur={handleBlur}
-			/>
+			/>*/}
 			<button className='todo__item-cross' onClick={() => {}}>
 				<Cross />
 			</button>
