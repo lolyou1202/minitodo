@@ -1,40 +1,31 @@
-import './TodoItem.style.scss'
 import classNames from 'classnames'
-import { Todo } from '../../App'
-import { ToggleCheck } from '../button/ToggleCheck/ToggleCheck'
+import { Todo } from '../../types'
+import { TodoListProps } from './TodoList'
+import { ToggleCheck } from '../ToggleCheck/ToggleCheck'
 import { Cross } from '../../icons/Cross'
 
-interface Props extends Todo {
-	handleClickToggleCheck: (id: number) => void
-	deleteTodo: (id: number) => void
-	changeNameTodo: (id: number, value: string) => void
-}
+type Props = Todo & Omit<TodoListProps, 'todoList'>
 
 export const TodoItem = ({
 	id,
 	isCompleted = false,
 	text,
-	handleClickToggleCheck,
+	toggleCheck,
 	deleteTodo,
 	changeNameTodo,
 }: Props) => {
-	const handleBlur = (todoText: string) => {
-		changeNameTodo(id, todoText)
-	}
-
 	const todoItemCN = classNames('todo__item', { completed: isCompleted })
-
 	return (
 		<li className={todoItemCN}>
 			<ToggleCheck
 				variant={isCompleted ? 'checked' : 'empty'}
-				onClick={() => handleClickToggleCheck(id)}
+				onClick={() => toggleCheck(id)}
 			/>
 			<div
 				className='todo__item-input'
 				contentEditable
 				suppressContentEditableWarning={true}
-				onBlur={e => handleBlur(e.target.textContent || '')}
+				onBlur={e => changeNameTodo(id, e.target.textContent || '')}
 			>
 				{text}
 			</div>

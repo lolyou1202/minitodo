@@ -1,7 +1,7 @@
 import './Header.style.scss'
 import classNames from 'classnames'
 import { useRef, useState } from 'react'
-import { ToggleCheck } from '../button/ToggleCheck/ToggleCheck'
+import { ToggleCheck } from '../ToggleCheck/ToggleCheck'
 import { Enter } from '../../icons/Enter'
 
 export const Header = ({
@@ -50,10 +50,12 @@ export const Header = ({
 				data-placeholder='What needs to be done?'
 				contentEditable
 				suppressContentEditableWarning={true}
-				onKeyDown={e =>
-					handleKeyPress(e.key, e.currentTarget.textContent || '')
-				}
-			></div>
+				//onKeyDown={e => {
+				//	handleKeyPress(e.key, e.currentTarget.textContent || '')
+				//	e.preventDefault()
+				//}}
+				onInput={(e) => console.log(e)}
+			>{newTodoText}</div>
 			<button
 				className='enter'
 				onClick={() => handleClickAddTodo(newTodoText)}

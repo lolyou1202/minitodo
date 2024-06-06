@@ -1,20 +1,21 @@
 import { useMemo, useState } from 'react'
-import { TodoItem } from './components/TodoItem/TodoItem'
+import { Todo, TodoListVariants } from './types'
 import { Header } from './components/Header/Header'
-
-export type Todo = {
-	id: number
-	text: string
-	isCompleted: boolean
-}
+import { TodoList } from './components/TodoList/TodoList'
+import { Footer } from './components/Footer/Footer'
+import { initialTodoList } from './constants'
 
 function App() {
-	const [todoList, setTodoList] = useState<Todo[]>([
-		{ id: 0, text: 'asdasfa', isCompleted: false },
-		{ id: 1, text: 'asfa', isCompleted: true },
-		{ id: 2, text: 'aasdsdasfa', isCompleted: false },
-		{ id: 3, text: 'a', isCompleted: false },
-	])
+	const generateInitialTodoList = (): Todo[] =>
+		initialTodoList.map((todo, index) => ({
+			id: index,
+			text: todo,
+			isCompleted: Math.random() > 0.5 ? true : false,
+		}))
+
+	const [todoList, setTodoList] = useState(generateInitialTodoList())
+
+	const [listVariant, setListVariant] = useState<TodoListVariants>('all')
 
 	const checkAll = useMemo(() => {
 		let isCompletedAll = true
@@ -26,11 +27,13 @@ function App() {
 		}
 		return isCompletedAll
 	}, [todoList])
-	const todoListVariants = useMemo(() => {
+	const todoListVariants = useMemo((): {
+		[key in TodoListVariants]: Todo[]
+	} => {
 		return {
 			all: todoList,
 			active: todoList.filter(todo => todo.isCompleted === false),
-			completed: todoList.filter(todo => todo.isCompleted === true)
+			completed: todoList.filter(todo => todo.isCompleted === true),
 		}
 	}, [todoList])
 
@@ -62,7 +65,7 @@ function App() {
 			})
 		)
 	}
-	const AddNewTodo = (newTodoText: string) => {
+	const addNewTodo = (newTodoText: string) => {
 		setTodoList(prev => [
 			{
 				id: prev.length,
@@ -78,58 +81,36 @@ function App() {
 	const clearCopletedTodo = () => {
 		setTodoList(todoListVariants.active)
 	}
+	const changeListVariant = (newListVariant: TodoListVariants) => {
+		setListVariant(newListVariant)
+	}
 
 	return (
-		<section className='app'>
+		<div className='app'>
 			<h1 className='title'>todos</h1>
 			<section className='todoBox'>
 				<Header
 					isCompletedAll={checkAll}
-					handleClickAddTodo={AddNewTodo}
+					handleClickAddTodo={addNewTodo}
 					handleClickToggleCheckAll={toggleCheckAll}
 				/>
 				<main className='main'>
-					<ul className='todo-list'>
-						{todoList.map(todo => {
-							return (
-								<TodoItem
-									key={todo.id}
-									{...todo}
-									handleClickToggleCheck={toggleCheck}
-									changeNameTodo={changeNameTodo}
-									deleteTodo={deleteTodo}
-								/>
-							)
-						})}
-					</ul>
+					<TodoList
+						todoList={todoListVariants[listVariant]}
+						toggleCheck={toggleCheck}
+						changeNameTodo={changeNameTodo}
+						deleteTodo={deleteTodo}
+					/>
 				</main>
-				<footer className='footer'>
-					<span className='todo-count'>{activeTodo.length} left</span>
-					<ul className='filters'>
-						<li>
-							<button className='filters-button selected'>
-								All
-							</button>
-						</li>
-						<li>
-							<button className='filters-button'>Active</button>
-						</li>
-						<li>
-							<button className='filters-button'>
-								Completed
-							</button>
-						</li>
-					</ul>
-					<button
-						className='clear'
-						disabled={completedTodo.length === 0}
-						onClick={clearCopletedTodo}
-					>
-						Clear completed
-					</button>
-				</footer>
+				<Footer
+					countActive={todoListVariants.active.length}
+					countCompleted={todoListVariants.completed.length}
+					clearCopletedTodo={clearCopletedTodo}
+					listVariant={listVariant}
+					changeListVariant={changeListVariant}
+				/>
 			</section>
-		</section>
+		</div>
 	)
 }
 

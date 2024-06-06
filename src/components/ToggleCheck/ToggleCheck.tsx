@@ -1,11 +1,13 @@
-import { Check } from '../../../icons/Check'
 import './ToggleCheck.style.scss'
+import { CheckVariant } from '../../types'
+import { Check } from '../../icons/Check'
+
 
 export const ToggleCheck = ({
 	variant = 'empty',
 	onClick,
 }: {
-	variant?: 'empty' | 'checked'
+	variant?: CheckVariant
 	onClick?: () => void
 }) => {
 	return (
