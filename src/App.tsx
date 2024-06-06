@@ -1,7 +1,6 @@
-import { useState } from 'react'
-import { Check } from './icons/Check'
-import { Enter } from './icons/Enter'
+import { useMemo, useState } from 'react'
 import { TodoItem } from './components/TodoItem/TodoItem'
+import { Header } from './components/Header/Header'
 
 export type Todo = {
 	id: number
@@ -11,8 +10,29 @@ export type Todo = {
 
 function App() {
 	const [todoList, setTodoList] = useState<Todo[]>([
-		{ id: 1, text: 'asdasfa', isCompleted: false },
+		{ id: 0, text: 'asdasfa', isCompleted: false },
+		{ id: 1, text: 'asfa', isCompleted: true },
+		{ id: 2, text: 'aasdsdasfa', isCompleted: false },
+		{ id: 3, text: 'a', isCompleted: false },
 	])
+
+	const checkAll = useMemo(() => {
+		let isCompletedAll = true
+		for (let index = 0; index < todoList.length; index++) {
+			if (!todoList[index].isCompleted) {
+				isCompletedAll = false
+				return false
+			}
+		}
+		return isCompletedAll
+	}, [todoList])
+	const todoListVariants = useMemo(() => {
+		return {
+			all: todoList,
+			active: todoList.filter(todo => todo.isCompleted === false),
+			completed: todoList.filter(todo => todo.isCompleted === true)
+		}
+	}, [todoList])
 
 	const toggleCheck = (id: number) => {
 		setTodoList(prev =>
@@ -20,6 +40,14 @@ function App() {
 				if (todo.id === id) {
 					todo.isCompleted = !todo.isCompleted
 				}
+				return todo
+			})
+		)
+	}
+	const toggleCheckAll = () => {
+		setTodoList(prev =>
+			prev.map(todo => {
+				todo.isCompleted = !checkAll
 				return todo
 			})
 		)
@@ -34,24 +62,32 @@ function App() {
 			})
 		)
 	}
+	const AddNewTodo = (newTodoText: string) => {
+		setTodoList(prev => [
+			{
+				id: prev.length,
+				text: newTodoText,
+				isCompleted: false,
+			},
+			...prev,
+		])
+	}
+	const deleteTodo = (id: number) => {
+		setTodoList(prev => prev.filter(todo => todo.id !== id))
+	}
+	const clearCopletedTodo = () => {
+		setTodoList(todoListVariants.active)
+	}
 
 	return (
 		<section className='app'>
 			<h1 className='title'>todos</h1>
 			<section className='todoBox'>
-				<header className='header'>
-					<button className='toggle-all'>
-						<Check />
-					</button>
-					<input
-						className='new-todo'
-						type='text'
-						placeholder='What needs to be done?'
-					/>
-					<button className='enter'>
-						<Enter />
-					</button>
-				</header>
+				<Header
+					isCompletedAll={checkAll}
+					handleClickAddTodo={AddNewTodo}
+					handleClickToggleCheckAll={toggleCheckAll}
+				/>
 				<main className='main'>
 					<ul className='todo-list'>
 						{todoList.map(todo => {
@@ -59,31 +95,16 @@ function App() {
 								<TodoItem
 									key={todo.id}
 									{...todo}
-									handleClickCheck={toggleCheck}
+									handleClickToggleCheck={toggleCheck}
 									changeNameTodo={changeNameTodo}
+									deleteTodo={deleteTodo}
 								/>
 							)
 						})}
-						{/*<li className='todo__item'>
-							<ToggleCheck variant='empty' />
-							<input className='todo__item-input' type='text' />
-							<button className='todo__item-cross'>
-								<Cross />
-							</button>
-						</li>
-						<li className='todo__item'>
-							<button className='todo__item-toggle'>
-								<Check />
-							</button>
-							<input className='todo__item-input' type='text' />
-							<button className='todo__item-cross'>
-								<Cross />
-							</button>
-						</li>*/}
 					</ul>
 				</main>
 				<footer className='footer'>
-					<span className='todo-count'>1 left</span>
+					<span className='todo-count'>{activeTodo.length} left</span>
 					<ul className='filters'>
 						<li>
 							<button className='filters-button selected'>
@@ -99,7 +120,13 @@ function App() {
 							</button>
 						</li>
 					</ul>
-					<button className='clear'>Clear completed</button>
+					<button
+						className='clear'
+						disabled={completedTodo.length === 0}
+						onClick={clearCopletedTodo}
+					>
+						Clear completed
+					</button>
 				</footer>
 			</section>
 		</section>

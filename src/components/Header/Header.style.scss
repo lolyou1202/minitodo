@@ -1,0 +1,47 @@
+.header {
+	display: flex;
+	border-bottom: 1px solid var(--gray-10);
+}
+.new-todo {
+	width: calc(100% - 48px - 48px);
+	padding: 20px 8px;
+	border: none;
+	border-radius: 0;
+	outline: none;
+	font-family: 'Work Sans', sans-serif;
+	font-weight: 400;
+	font-size: 24px;
+	line-height: 24px;
+	color: var(--text-100);
+	white-space: nowrap;
+	cursor: text;
+	transition: all 0.2s ease-in-out;
+	&:empty::before {
+		content: attr(data-placeholder);
+		position: absolute;
+		font-weight: 300;
+		color: var(--text-300);
+	}
+	&.empty {
+		& + .enter {
+			opacity: 0;
+			pointer-events: none;
+		}
+	}
+}
+.enter {
+	display: flex;
+	justify-content: center;
+	position: relative;
+	width: 48px;
+	padding: 24px 0;
+	border: none;
+	background: none;
+	cursor: pointer;
+	opacity: 1;
+	pointer-events: all;
+	transition: all 0.2s ease-in-out;
+	path {
+		stroke: var(--text-200);
+	}
+}

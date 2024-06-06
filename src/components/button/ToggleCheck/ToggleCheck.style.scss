@@ -1,13 +1,13 @@
-.todo-check {
+.todo-toggleCheck {
 	display: flex;
-	align-items: center;
 	justify-content: center;
-	position: relative;
-	padding: 0px 8px;
+	width: 48px;
+	padding: 16px 0;
 	border: none;
 	background: none;
 	cursor: pointer;
 	span {
+		position: relative;
 		width: 32px;
 		height: 32px;
 		border-radius: 100%;

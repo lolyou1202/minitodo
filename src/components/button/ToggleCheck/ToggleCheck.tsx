@@ -9,9 +9,10 @@ export const ToggleCheck = ({
 	onClick?: () => void
 }) => {
 	return (
-		<button className={`todo-check ${variant}`} onClick={onClick}>
-			<span></span>
-			<Check />
+		<button className={`todo-toggleCheck ${variant}`} onClick={onClick}>
+			<span>
+				<Check />
+			</span>
 		</button>
 	)
 }
