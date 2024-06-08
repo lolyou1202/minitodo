@@ -17,22 +17,19 @@ export const Header = ({
 
 	const newTodoRef = useRef<HTMLDivElement | null>(null)
 
-	const handleKeyPress = (eventKey: string, todoText: string) => {
+	const handleKeyPress = (event: React.KeyboardEvent<HTMLDivElement>) => {
+		const eventKey = event.key
+		const todoText = event.currentTarget.innerText
+
 		if (eventKey === 'Enter') {
 			if (todoText !== '') {
 				handleClickAddTodo(todoText)
 				setNewTodoText('')
-				if (newTodoRef.current) {
-					//newTodoRef.current.replaceChildren()
-					newTodoRef.current.innerHTML = ''
-				}
+				event.preventDefault()
+				event.currentTarget.innerHTML = ''
 			}
 		} else {
 			setNewTodoText(todoText)
-		}
-		if (eventKey === 'Enter' && newTodoRef.current) {
-			//newTodoRef.current.replaceChildren()
-			newTodoRef.current.innerHTML = ''
 		}
 	}
 
@@ -50,15 +47,16 @@ export const Header = ({
 				data-placeholder='What needs to be done?'
 				contentEditable
 				suppressContentEditableWarning={true}
-				//onKeyDown={e => {
-				//	handleKeyPress(e.key, e.currentTarget.textContent || '')
-				//	e.preventDefault()
-				//}}
-				onInput={(e) => console.log(e)}
-			>{newTodoText}</div>
+				onKeyDown={e => handleKeyPress(e)}
+			></div>
 			<button
 				className='enter'
-				onClick={() => handleClickAddTodo(newTodoText)}
+				onClick={() => {
+					handleClickAddTodo(newTodoText)
+					if (newTodoRef.current) {
+						newTodoRef.current.innerHTML = ''
+					}
+				}}
 			>
 				<Enter />
 			</button>

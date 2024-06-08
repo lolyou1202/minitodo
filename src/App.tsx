@@ -1,41 +1,20 @@
-import { useMemo, useState } from 'react'
-import { Todo, TodoListVariants } from './types'
+import { useState } from 'react'
+import { TodoListVariants } from './types'
 import { Header } from './components/Header/Header'
 import { TodoList } from './components/TodoList/TodoList'
 import { Footer } from './components/Footer/Footer'
-import { initialTodoList } from './constants'
+import { useGenerateInitialTodoList } from './hooks/useGenerateInitialTodoList'
+import { useCheckAll } from './hooks/useCheckAll'
+import { useTodoListVariants } from './hooks/useTodoListVariants'
 
 function App() {
-	const generateInitialTodoList = (): Todo[] =>
-		initialTodoList.map((todo, index) => ({
-			id: index,
-			text: todo,
-			isCompleted: Math.random() > 0.5 ? true : false,
-		}))
+	const initialTodoList = useGenerateInitialTodoList()
 
-	const [todoList, setTodoList] = useState(generateInitialTodoList())
-
+	const [todoList, setTodoList] = useState(initialTodoList)
 	const [listVariant, setListVariant] = useState<TodoListVariants>('all')
 
-	const checkAll = useMemo(() => {
-		let isCompletedAll = true
-		for (let index = 0; index < todoList.length; index++) {
-			if (!todoList[index].isCompleted) {
-				isCompletedAll = false
-				return false
-			}
-		}
-		return isCompletedAll
-	}, [todoList])
-	const todoListVariants = useMemo((): {
-		[key in TodoListVariants]: Todo[]
-	} => {
-		return {
-			all: todoList,
-			active: todoList.filter(todo => todo.isCompleted === false),
-			completed: todoList.filter(todo => todo.isCompleted === true),
-		}
-	}, [todoList])
+	const isCheckAll = useCheckAll(todoList)
+	const todoListVariants = useTodoListVariants(todoList)
 
 	const toggleCheck = (id: number) => {
 		setTodoList(prev =>
@@ -50,7 +29,7 @@ function App() {
 	const toggleCheckAll = () => {
 		setTodoList(prev =>
 			prev.map(todo => {
-				todo.isCompleted = !checkAll
+				todo.isCompleted = !isCheckAll
 				return todo
 			})
 		)
@@ -90,7 +69,7 @@ function App() {
 			<h1 className='title'>todos</h1>
 			<section className='todoBox'>
 				<Header
-					isCompletedAll={checkAll}
+					isCompletedAll={isCheckAll}
 					handleClickAddTodo={addNewTodo}
 					handleClickToggleCheckAll={toggleCheckAll}
 				/>
