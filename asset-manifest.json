@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/minitodo/static/css/main.42261265.css",
+    "main.js": "/minitodo/static/js/main.049e54f6.js",
+    "index.html": "/minitodo/index.html",
+    "main.42261265.css.map": "/minitodo/static/css/main.42261265.css.map",
+    "main.049e54f6.js.map": "/minitodo/static/js/main.049e54f6.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.42261265.css",
+    "static/js/main.049e54f6.js"
+  ]
+}
